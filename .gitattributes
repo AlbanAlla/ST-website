@@ -1,0 +1,7 @@
+# Store text files with LF line endings in Git, whatever the operating system.
+# Avoids "LF will be replaced by CRLF" warnings and noisy diffs between Windows and Mac/Linux.
+* text=auto eol=lf
+
+# Windows-only scripts need CRLF line endings to run correctly.
+*.bat text eol=crlf
+*.cmd text eol=crlf
