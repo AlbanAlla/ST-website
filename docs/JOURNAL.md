@@ -25,6 +25,7 @@ done (including every command), what went wrong, and what comes next.
 8. "Check again to see if it works now, with the correct noreply email."
 9. "For the repository name, let's use ST-website. Let's keep the repo as public
    for now."
+10. "Proceed with the next step." (Phase 1.4: final health check.)
 
 ### What was done
 
@@ -198,6 +199,39 @@ Repository: https://github.com/AlbanAlla/ST-website
 Because the repository is public, anyone can read these files. They contain no
 passwords or tokens. The only email in them is the GitHub noreply address.
 
+**Step 9: Final health check (Phase 1.4).**
+Claude ran one combined check:
+
+```powershell
+winget --version; git --version; node --version; npm --version; code --version; gh --version
+code --list-extensions --show-versions
+git var GIT_COMMITTER_IDENT
+gh auth status
+git push --dry-run origin main
+gh repo view AlbanAlla/ST-website --json viewerPermission
+```
+
+Results:
+- All six tools and three extensions report the same versions as in Step 5.
+- The Git identity and the GitHub login are working.
+- `git push --dry-run` printed "Everything up-to-date", which means GitHub
+  accepted the connection without actually sending anything.
+- GitHub reports **ADMIN** permission on the repository.
+- Pushing this step's commit was the final real proof that pushing works.
+
+Claude also wrote a **"Setup from zero"** section in `README.md`. It walks through
+preparing a brand-new computer: install the tools, install the extensions, set
+the Git identity, log in to GitHub, download the project and check everything.
+It also records the versions used and has a short note for Mac.
+
+```powershell
+git add README.md docs/JOURNAL.md
+git commit -m "docs: add setup-from-zero guide and Phase 1 health check"
+git push
+```
+
+**Phase 1 (setting up the computer) is complete.**
+
 ### Problems and fixes
 - **New commands weren't found in the terminal that was already open.**
   A terminal reads the PATH (Windows' list of places to look for programs) once,
@@ -212,6 +246,5 @@ passwords or tokens. The only email in them is the GitHub noreply address.
   real one hidden. Details in `docs/TROUBLESHOOTING.md`.
 
 ### What's next
-- Phase 1.4: final health check of every tool, confirm pushing to GitHub works,
-  and write a "Setup from zero" section in the README.
-- Then Phase 2: the interview about what the website should be.
+- Phase 2.1: Claude interviews me about the website (purpose, audience, pages,
+  features, look and feel), then writes everything into `docs/BRIEF.md`.
